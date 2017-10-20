@@ -1,0 +1,19 @@
+{
+  "name": "explain-analyzer",
+  "version": "0.0.1",
+  "description": "Explain analyzer for MySQL",
+  "scripts": {
+    "test": "ospec",
+    "start": "webpack js/index.js html/js/app.min.js -d --watch",
+    "build": "webpack js/index.js html/js/app.min.js -p"
+  },
+  "keywords": [],
+  "repository": "github.com/Preetam/explain-analyzer",
+  "license": "bsd",
+  "dependencies": {
+    "mithril": "^1.1.3"
+  },
+  "devDependencies": {
+    "webpack": "^2.6.1"
+  }
+}
