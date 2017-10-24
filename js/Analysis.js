@@ -50,7 +50,7 @@ var TablesScalability = function(tables) {
           return m("tr",
             m("td", o.name),
             m("td", o.rows),
-            m("td", m("input", {value: o.newRows, oninput: o.setNewRows})),
+            m("td", m("input", {value: o.newRows, oninput: o.setNewRows}))
           )
         })
       ]),
