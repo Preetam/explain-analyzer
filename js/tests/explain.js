@@ -27,9 +27,7 @@ o.spec("Explain", function() {
           ]
         },
         "select_id": 1
-      },
-      "ExplainType": "mysql/json/1",
-      "ExplainWarnings": []
+      }
     })
 
     o(explain.tables.length).equals(2)

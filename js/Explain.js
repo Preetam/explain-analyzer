@@ -12,6 +12,7 @@ function traverse(o, func) {
 }
 
 Explain.parse = function(explain, o) {
+  explain.tables = [];
   traverse(o, function(k, v) {
     if (k == "table") {
       explain.tables.push(v);

@@ -4,9 +4,11 @@ var Analysis = require("./Analysis")
 
 var App = {
   oninit: function(vnode) {
+    vnode.state.analysis = "div";
     vnode.state.explain = new Explain();
     vnode.state.processInput = function() {
       Explain.parse(vnode.state.explain, JSON.parse(this.value));
+      vnode.state.analysis = new Analysis(vnode.state.explain);
     }
   },
   view: function(vnode) {
@@ -17,7 +19,7 @@ var App = {
       }),
       m("div", [
         m("h2", "Analysis"),
-        m(new Analysis(vnode.state.explain))
+        m(vnode.state.analysis)
       ])
     ])
   }
