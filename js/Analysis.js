@@ -19,7 +19,13 @@ var Table = function(name, rows, accessType) {
   case "ALL":
     this.scalability = "n";
     break;
+  case "index":
+    this.scalability = "n";
+    break;
   case "ref":
+    this.scalability = "log n";
+    break;
+  case "eq_ref":
     this.scalability = "log n";
     break;
   case "const":
@@ -62,6 +68,42 @@ var TablesScalability = function(tables) {
   }.bind(this);
 }
 
+var Comments = function(tables) {
+  this.oninit = function(vnode) {
+    vnode.state.tables = tables;
+    vnode.state.tables.forEach(function(t) {
+      switch (t.accessType) {
+      case "ALL":
+        t.comment = "There is a full scan of this table.";
+        break;
+      case "index":
+        t.comment = "There is a full index scan for this table.";
+        break;
+      }
+    })
+  }.bind(this);
+
+  this.view = function(vnode) {
+    var factor = 1;
+    return m("div",
+      m("h4", "Comments"),
+      m("ul", [
+        vnode.state.tables.filter(function(o) {
+          if (o.comment) {
+            return true;
+          }
+          return false;
+        }).map(function(o) {
+          return m("li",
+            m("strong", o.name),
+            ": ",
+            o.comment);
+        })
+      ])
+    )
+  }.bind(this);
+}
+
 var Analysis = function(explain) {
   this.explain = explain;
   this.oninit = function(vnode) {
@@ -72,6 +114,7 @@ var Analysis = function(explain) {
       )
     })
     vnode.state.tablesScalability = new TablesScalability(vnode.state.tables);
+    vnode.state.commentary = new Comments(vnode.state.tables);
   }.bind(this);
   this.view = function(vnode) {
     return m("div", vnode.state.tables.map(function(o) {
@@ -82,7 +125,8 @@ var Analysis = function(explain) {
         ", Scalability: ", m("strong", o.scalability)
       ])
     }),
-    m(vnode.state.tablesScalability)
+    m(vnode.state.tablesScalability),
+    m(vnode.state.commentary)
     )
   }.bind(this);
 }
