@@ -11,7 +11,7 @@ var linearFactorFunc = function(a, b) {
 }
 
 var logFactorFunc = function(a, b) {
-  return Math.log(a+1) / Math.log(b+1);
+  return Math.log(a+100) / Math.log(b+100); // 100 is arbitrary :)
 }
 
 var BigOFactor = function(bigO, size) {
