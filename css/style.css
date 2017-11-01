@@ -9,3 +9,12 @@ body {
   min-width: 20rem;
   min-height: 4rem;
 }
+
+input:disabled {
+  background: #eee;
+}
+
+table {
+  border-spacing: 10px;
+  border-collapse: separate;
+}
