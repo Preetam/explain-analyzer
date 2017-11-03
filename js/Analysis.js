@@ -138,8 +138,9 @@ var Analysis = function(explain) {
   this.oninit = function(vnode) {
     vnode.state.tables = [];
     this.explain.tables.map(function(o) {
+      var rows = o.rows_examined_per_scan || o.rows;
       vnode.state.tables.push(
-        new Table(o.table_name, o.rows_examined_per_scan, o.access_type, o.key)
+        new Table(o.table_name, rows, o.access_type, o.key)
       )
     })
     vnode.state.tablesScalability = new TablesScalability(vnode.state.tables);
