@@ -88,29 +88,29 @@ var Comments = function(tables) {
     vnode.state.tables.forEach(function(t) {
       switch (t.accessType) {
       case "ALL":
-        t.comment = "There is a full scan on this table.";
+        t.comment = "The entire table is scanned.";
         break;
       case "index":
-        t.comment = "There is a full index scan on this table.";
+        t.comment = "An entire index is scanned.";
         break;
       case "range":
-        t.comment = "This table is accessed using a range read.";
+        t.comment = "A range of rows are accessed using an index.";
         break;
       case "ref":
-        t.comment = "Rows are being accessed from this table using an index.";
+        t.comment = "Matching rows are being accessed.";
         break;
       case "eq_ref":
-        t.comment = "At most one row is being accessed from this table using an index.";
+        t.comment = "At most one row is accessed from this table using an index.";
         break;
       case "const":
-        t.comment = "This table is being read once at the beginning of the query and is effectively a constant.";
+        t.comment = "This table is read once at the beginning of the query and is effectively a constant.";
       }
 
       if (t.key) {
         if (t.key == "PRIMARY") {
-          t.comment += " The primary key is being used.";
+          t.comment += " MySQL is using the PRIMARY KEY.";
         } else {
-          t.comment += " The index '" + t.key + "' is being used.";
+          t.comment += " MySQL is using the '" + t.key + "' index.";
         }
       }
     })
@@ -142,6 +142,7 @@ var Analysis = function(explain) {
   this.oninit = function(vnode) {
     vnode.state.tables = [];
     this.explain.tables.map(function(o) {
+      var rows = o.rows_examined_per_scan || o.rows;
       vnode.state.tables.push(
         new Table(
             o.table_name,
