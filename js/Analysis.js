@@ -90,6 +90,7 @@ var Comments = function(tables) {
   this.oninit = function(vnode) {
     vnode.state.tables = tables;
     vnode.state.tables.forEach(function(t) {
+      t.comment = "";
       switch (t.accessType) {
       case "ALL":
         t.comment = "The entire table is scanned.";
@@ -108,11 +109,19 @@ var Comments = function(tables) {
         break;
       case "const":
         t.comment = "This table is read once at the beginning of the query and is effectively a constant.";
+        break;
+      case "index_merge":
+        t.comment = "MySQL is using multiple indexes."
       }
 
       if (t.key) {
         if (t.key == "PRIMARY") {
           t.comment += " MySQL is using the PRIMARY KEY.";
+        } if (t.accessType == "index_merge") {
+          t.comment += " The indexes and merge type are " + t.key + ".";
+          if (t.key.match(/^intersect/i)) {
+            t.comment += " Looks like the merge type is 'intersect'. This may be slow with complicated WHERE clauses!";
+          }
         } else {
           t.comment += " MySQL is using the '" + t.key + "' index.";
         }
@@ -132,7 +141,7 @@ var Comments = function(tables) {
           return false;
         }).map(function(o) {
           return m("li",
-            m("strong", o.name),
+            m("strong", "Table \"" + o.name + "\""),
             ": ",
             o.comment);
         })
@@ -165,7 +174,7 @@ var ExplainTable = function(tables) {
           return m("tr",
             m("td", o.name),
             m("td", o.accessType),
-            m("td", o.possibleKeys || ""),
+            m("td", o.possibleKeys ? o.possibleKeys.join(", ") : ""),
             m("td", o.key || ""),
             m("td", o.keyLength || ""),
             m("td", (o.ref || []).join(", ")),
