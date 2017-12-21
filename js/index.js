@@ -1,14 +1,19 @@
 var m = require("mithril")
 var Explain = require("./Explain")
 var Analysis = require("./Analysis")
+var ErrorMessage = require("./ErrorMessage")
 
 var App = {
   oninit: function(vnode) {
     vnode.state.analysis = "div";
     vnode.state.explain = new Explain();
     vnode.state.processInput = function() {
-      Explain.parse(vnode.state.explain, JSON.parse(this.value));
-      vnode.state.analysis = new Analysis(vnode.state.explain);
+      try {
+        Explain.parse(vnode.state.explain, JSON.parse(this.value));
+        vnode.state.analysis = new Analysis(vnode.state.explain);
+      } catch(e) {
+        vnode.state.analysis = new ErrorMessage("Error parsing explain JSON", ""+e)
+      }
     }
   },
   view: function(vnode) {
@@ -26,7 +31,6 @@ var App = {
         m("span.pure-form-message", "Paste the output of EXPLAIN FORMAT=JSON ...")
       )),
       m("div", [
-        m("h2", "Analysis"),
         m(vnode.state.analysis)
       ])
     ])

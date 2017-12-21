@@ -53,26 +53,30 @@ var TablesScalability = function(tables) {
   this.view = function(vnode) {
     var factor = 1;
     return m("div",
-      m("h4", "Estimation"),
-      m("table", [
-        m("tr", [
-          m("th", "Table"),
-          m("th", "Row count"),
-          m("th", "Estimated row count or scale factor"),
-        ]),
-        vnode.state.tables.map(function(o) {
-          var disabled = false;
-          if (o.bigO) {
-            factor *= o.bigO.factor(o.newRows);
-          } else {
-            disabled = true;
-          }
-          return m("tr",
-            m("td", o.name),
-            m("td", o.rows),
-            m("td", m("input", {value: o.newRows, oninput: o.setNewRows, disabled: disabled}))
-          )
-        })
+      m("h4", "Estimation (experimental!)"),
+      m("table.pure-table", [
+        m("thead",
+          m("tr", [
+            m("th", "Table"),
+            m("th", "Row count"),
+            m("th", "Estimated row count or scale factor"),
+          ])
+        ), // thead
+        m("tbody",
+          vnode.state.tables.map(function(o) {
+            var disabled = false;
+            if (o.bigO) {
+              factor *= o.bigO.factor(o.newRows);
+            } else {
+              disabled = true;
+            }
+            return m("tr",
+              m("td", o.name),
+              m("td", o.rows),
+              m("td", m("input", {value: o.newRows, oninput: o.setNewRows, disabled: disabled}))
+            )
+          })
+        ) // tbody
       ]),
       m("p",
         "Latency scale factor: ",
@@ -137,6 +141,44 @@ var Comments = function(tables) {
   }.bind(this);
 }
 
+var ExplainTable = function(tables) {
+  this.oninit = function(vnode) {
+    vnode.state.tables = tables;
+  }
+  this.view = function(vnode) {
+    return m("table.pure-table", [
+      m("thead",
+        m("tr", [
+          m("th", "Table"),
+          m("th", "Access type"),
+          m("th", "Possible indexes"),
+          m("th", "Index"),
+          m("th", "Index key length"),
+          m("th", "Ref"),
+          m("th", "Rows examined per scan"),
+          m("th", "Filtered"),
+          m("th", "Scalability"),
+        ])
+      ), // thead
+      m("tbody",
+        vnode.state.tables.map(function(o) {
+          return m("tr",
+            m("td", o.name),
+            m("td", o.accessType),
+            m("td", o.possibleKeys || ""),
+            m("td", o.key || ""),
+            m("td", o.keyLength || ""),
+            m("td", (o.ref || []).join(", ")),
+            m("td", o.rows),
+            m("td", o.filtered),
+            m("td", "O(" + o.scalability + ")")
+          )
+        })
+      ) // tbody
+    ])
+  }
+}
+
 var Analysis = function(explain) {
   this.explain = explain;
   this.oninit = function(vnode) {
@@ -155,39 +197,16 @@ var Analysis = function(explain) {
             o.filtered)
       )
     })
+    vnode.state.explainTable = new ExplainTable(vnode.state.tables);
     vnode.state.tablesScalability = new TablesScalability(vnode.state.tables);
     vnode.state.commentary = new Comments(vnode.state.tables);
   }.bind(this);
   this.view = function(vnode) {
     return m("div", [
-      m("table", [
-        m("tr", [
-          m("th", "Table"),
-          m("th", "Access type"),
-          m("th", "Possible indexes"),
-          m("th", "Index"),
-          m("th", "Index key length"),
-          m("th", "Ref"),
-          m("th", "Rows examined per scan"),
-          m("th", "Filtered"),
-          m("th", "Scalability"),
-        ]),
-        vnode.state.tables.map(function(o) {
-          return m("tr",
-            m("td", o.name),
-            m("td", o.accessType),
-            m("td", o.possibleKeys || "N/A"),
-            m("td", o.key || "N/A"),
-            m("td", o.keyLength || "N/A"),
-            m("td", (o.ref || []).join(", ")),
-            m("td", o.rows),
-            m("td", o.filtered),
-            m("td", "O(" + o.scalability + ")")
-          )
-        })
-      ]),
-      m(vnode.state.tablesScalability),
-      m(vnode.state.commentary)
+      m("h3", "Analysis"),
+      m(vnode.state.explainTable),
+      m(vnode.state.commentary),
+      m(vnode.state.tablesScalability)
     ])
   }.bind(this);
 }

@@ -8,7 +8,7 @@ body {
 }
 
 .container {
-  width: 40rem;
+  width: 48rem;
   margin: 0 auto;
 }
 
@@ -24,4 +24,22 @@ input:disabled {
 .explain-input {
   font-family: monospace;
   font-size: 0.8rem;
+}
+
+.error-message {
+  padding:
+  background-color: #fafafa;
+  color: #d02c2c;
+}
+
+.footer {
+  color: #999;
+  text-align: center;
+  padding: 0.25rem 0 1rem;
+  margin-top: 1rem;
+  border-top: 1px solid #eee;
+}
+
+.footer a {
+    color: #666;
 }
