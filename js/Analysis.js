@@ -188,7 +188,7 @@ var Analysis = function(explain) {
       vnode.state.tables.push(
         new Table(
             o.table_name,
-            o.rows_examined_per_scan,
+            rows,
             o.access_type,
             o.key,
             o.possible_keys,
