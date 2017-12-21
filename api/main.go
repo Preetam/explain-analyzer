@@ -29,7 +29,7 @@ func main() {
 		WithEndpoint(*s3Endpoint).
 		WithCredentials(credentials.NewStaticCredentials(*s3Key, *s3Secret, ""))))
 
-	objectStore := &s3ObjectStore{s3: s3Service, bucket: "explains"}
+	objectStore := &s3ObjectStore{s3: s3Service, bucket: "explains", contentType: "application/json", grantRead: "public-read"}
 	http.Handle("/", NewAPI(objectStore).Service())
 	log.Fatal(http.ListenAndServe(*addr, nil))
 }

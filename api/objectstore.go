@@ -21,8 +21,10 @@ type ObjectStore interface {
 }
 
 type s3ObjectStore struct {
-	s3     *s3.S3
-	bucket string
+	s3          *s3.S3
+	bucket      string
+	grantRead   string
+	contentType string
 }
 
 func (objectStore *s3ObjectStore) GetObject(name string) (io.ReadCloser, error) {
@@ -47,7 +49,8 @@ func (objectStore *s3ObjectStore) DeleteObject(name string) error {
 
 func (objectStore *s3ObjectStore) PutObject(name string, data io.ReadSeeker, size int64) error {
 	input := &s3.PutObjectInput{}
-	input = input.SetBucket(objectStore.bucket).SetKey(name).SetContentLength(size).SetBody(data)
+	input = input.SetBucket(objectStore.bucket).SetKey(name).SetContentLength(size).SetContentType(objectStore.contentType).
+		SetBody(data).SetGrantRead(objectStore.grantRead)
 	_, err := objectStore.s3.PutObject(input)
 	return err
 }
