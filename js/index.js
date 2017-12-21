@@ -13,10 +13,18 @@ var App = {
   },
   view: function(vnode) {
     return m("div", [
-      m("textarea.explain-input", {
-        placeholder: "MySQL JSON Explain",
-        oninput: vnode.state.processInput
-      }),
+      m("form",
+        {
+          className: "pure-form pure-form-stacked",
+        },
+        m("fieldset.pure-group",
+        m("textarea", {
+          className: "explain-input pure-input-2-3",
+          placeholder: "MySQL JSON Explain { . . . }",
+          oninput: vnode.state.processInput
+        }),
+        m("span.pure-form-message", "Paste the output of EXPLAIN FORMAT=JSON ...")
+      )),
       m("div", [
         m("h2", "Analysis"),
         m(vnode.state.analysis)

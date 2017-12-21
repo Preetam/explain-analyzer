@@ -50,25 +50,29 @@ var TablesScalability = function(tables) {
     var factor = 1;
     return m("div",
       m("h4", "Estimation"),
-      m("table", [
-        m("tr", [
-          m("th", "Table"),
-          m("th", "Row count"),
-          m("th", "Estimated row count"),
-        ]),
-        vnode.state.tables.map(function(o) {
-          var disabled = false;
-          if (o.bigO) {
-            factor *= o.bigO.factor(o.newRows);
-          } else {
-            disabled = true;
-          }
-          return m("tr",
-            m("td", o.name),
-            m("td", o.rows),
-            m("td", m("input", {value: o.newRows, oninput: o.setNewRows, disabled: disabled}))
-          )
-        })
+      m("table.pure-table", [
+        m("thead",
+          m("tr", [
+            m("th", "Table"),
+            m("th", "Row count"),
+            m("th", "Estimated row count"),
+          ])
+        ), // thead
+        m("tbody",
+          vnode.state.tables.map(function(o) {
+            var disabled = false;
+            if (o.bigO) {
+              factor *= o.bigO.factor(o.newRows);
+            } else {
+              disabled = true;
+            }
+            return m("tr",
+              m("td", o.name),
+              m("td", o.rows),
+              m("td", m("input", {value: o.newRows, oninput: o.setNewRows, disabled: disabled}))
+            )
+          })
+        ) // tbody
       ]),
       m("p",
         "Latency scale factor: ",
@@ -148,23 +152,27 @@ var Analysis = function(explain) {
   }.bind(this);
   this.view = function(vnode) {
     return m("div", [
-      m("table", [
-        m("tr", [
-          m("th", "Table"),
-          m("th", "Access type"),
-          m("th", "Index"),
-          m("th", "Rows examined per scan"),
-          m("th", "Scalability"),
-        ]),
-        vnode.state.tables.map(function(o) {
-          return m("tr",
-            m("td", o.name),
-            m("td", o.accessType),
-            m("td", o.key || "N/A"),
-            m("td", o.rows),
-            m("td", "O(" + o.scalability + ")")
-          )
-        })
+      m("table.pure-table", [
+        m("thead",
+          m("tr", [
+            m("th", "Table"),
+            m("th", "Access type"),
+            m("th", "Index"),
+            m("th", "Rows examined per scan"),
+            m("th", "Scalability"),
+          ])
+        ), // thead
+        m("tbody",
+          vnode.state.tables.map(function(o) {
+            return m("tr",
+              m("td", o.name),
+              m("td", o.accessType),
+              m("td", o.key || "N/A"),
+              m("td", o.rows),
+              m("td", "O(" + o.scalability + ")")
+            )
+          })
+        ) // tbody
       ]),
       m(vnode.state.tablesScalability),
       m(vnode.state.commentary)
