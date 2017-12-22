@@ -48,6 +48,7 @@ func NewAPI(os ObjectStore) *API {
 func (api *API) Service() *siesta.Service {
 	APIService := siesta.NewService("/api/v1/")
 	APIService.Route("POST", "/explains", "creates an explain object", api.CreateExplain)
+	APIService.Route("GET", "/explains/:objectName", "gets an explain object", api.GetExplain)
 	return APIService
 }
 
@@ -60,15 +61,24 @@ func (api *API) CreateExplain(c siesta.Context, w http.ResponseWriter, r *http.R
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
-	marshaled, err := json.Marshal(explain)
+	buf := &bytes.Buffer{}
+	enc := json.NewEncoder(buf)
+	enc.SetEscapeHTML(false)
+	err = enc.Encode(explain)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
-	hash := sha1.Sum(marshaled)
+
+	if buf.Len() > maxSize {
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	hash := sha1.Sum(buf.Bytes())
 	objectName := fmt.Sprintf("%x.json", hash)
 
-	err = api.os.PutObject(objectName, bytes.NewReader(marshaled), int64(len(marshaled)))
+	err = api.os.PutObject(objectName, bytes.NewReader(buf.Bytes()), int64(len(buf.Bytes())))
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		return
@@ -79,5 +89,37 @@ func (api *API) CreateExplain(c siesta.Context, w http.ResponseWriter, r *http.R
 	}
 
 	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(response)
+}
+
+func (api *API) GetExplain(c siesta.Context, w http.ResponseWriter, r *http.Request) {
+	var params siesta.Params
+	objectName := params.String("objectName", "", "name of explain")
+	err := params.Parse(r.Form)
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	or, err := api.os.GetObject(*objectName)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	explain := map[string]interface{}{}
+
+	err = json.NewDecoder(or).Decode(&explain)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	response := map[string]interface{}{
+		"explain": explain,
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
 	json.NewEncoder(w).Encode(response)
 }

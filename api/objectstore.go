@@ -50,7 +50,7 @@ func (objectStore *s3ObjectStore) DeleteObject(name string) error {
 func (objectStore *s3ObjectStore) PutObject(name string, data io.ReadSeeker, size int64) error {
 	input := &s3.PutObjectInput{}
 	input = input.SetBucket(objectStore.bucket).SetKey(name).SetContentLength(size).SetContentType(objectStore.contentType).
-		SetBody(data).SetGrantRead(objectStore.grantRead)
+		SetBody(data).SetACL(objectStore.grantRead)
 	_, err := objectStore.s3.PutObject(input)
 	return err
 }
