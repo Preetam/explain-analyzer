@@ -1,11 +1,14 @@
 var o = require("mithril/ospec/ospec")
+// Polyfill DOM env for mithril
+global.window = require("mithril/test-utils/browserMock.js")();
+global.document = window.document;
 
 var Explain = require("../Explain")
 
 o.spec("Explain", function() {
   o("parses a JSON explain", function() {
     var explain = new Explain();
-    Explain.parse(explain, {
+    explain.data = {
       "query_block": {
         "grouping_operation": {
           "nested_loop": [
@@ -28,14 +31,15 @@ o.spec("Explain", function() {
         },
         "select_id": 1
       }
-    })
+    };
+    Explain.parse(explain)
 
     o(explain.tables.length).equals(2)
   })
 
   o("handles 'rows'", function() {
     var explain = new Explain();
-    Explain.parse(explain, {
+    explain.data = {
       "query_block": {
         "grouping_operation": {
           "nested_loop": [
@@ -58,7 +62,8 @@ o.spec("Explain", function() {
         },
         "select_id": 1
       }
-    })
+    };
+    Explain.parse(explain)
 
     o(explain.tables.length).equals(2)
     o(explain.tables[0].rows).equals(1609)
