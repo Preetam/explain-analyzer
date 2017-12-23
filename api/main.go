@@ -47,12 +47,19 @@ func NewAPI(os ObjectStore) *API {
 // Service returns a siesta service for the API.
 func (api *API) Service() *siesta.Service {
 	APIService := siesta.NewService("/api/v1/")
+	APIService.Route("OPTIONS", "/explains", "handles CORS preflight", func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Access-Control-Allow-Origin", "*")
+		w.Header().Set("Access-Control-Allow-Method", "POST")
+		w.Header().Set("Access-Control-Allow-Headers", r.Header.Get("Access-Control-Request-Headers"))
+	})
 	APIService.Route("POST", "/explains", "creates an explain object", api.CreateExplain)
 	APIService.Route("GET", "/explains/:objectName", "gets an explain object", api.GetExplain)
 	return APIService
 }
 
 func (api *API) CreateExplain(c siesta.Context, w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+
 	const maxSize = 16000
 
 	explain := map[string]interface{}{}
@@ -93,6 +100,8 @@ func (api *API) CreateExplain(c siesta.Context, w http.ResponseWriter, r *http.R
 }
 
 func (api *API) GetExplain(c siesta.Context, w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+
 	var params siesta.Params
 	objectName := params.String("objectName", "", "name of explain")
 	err := params.Parse(r.Form)
@@ -120,6 +129,5 @@ func (api *API) GetExplain(c siesta.Context, w http.ResponseWriter, r *http.Requ
 	}
 
 	w.Header().Set("Content-Type", "application/json")
-	w.Header().Set("Access-Control-Allow-Origin", "*")
 	json.NewEncoder(w).Encode(response)
 }
