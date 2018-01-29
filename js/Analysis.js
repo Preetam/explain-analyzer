@@ -142,7 +142,7 @@ var Comments = function(tables) {
             return true;
           }
         }).map(function(o) {
-          return m("li", "Table " + o.name)
+          return m("li", "Table ", m("strong", o.name))
         })
       ]),
       m("h5", "Full index scans"),
