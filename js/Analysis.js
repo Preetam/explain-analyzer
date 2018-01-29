@@ -1,6 +1,7 @@
 var m = require("mithril");
 var BigOFactor = require("./BigOFactor");
 
+// Table is a table accessed by the query.
 var Table = function(name, rows, accessType, key, possibleKeys, keyLength, ref, filtered) {
   this.name = name;
   this.rows = rows;
@@ -93,10 +94,10 @@ var Comments = function(tables) {
       t.comment = "";
       switch (t.accessType) {
       case "ALL":
-        t.comment = "The entire table is scanned.";
+        t.fts = true;
         break;
       case "index":
-        t.comment = "An entire index is scanned.";
+        t.fullIndexScan = true;
         break;
       case "range":
         t.comment = "A range of rows are accessed using an index.";
@@ -133,6 +134,29 @@ var Comments = function(tables) {
     var factor = 1;
     return m("div",
       m("h4", "Comments"),
+      m("h5", "Full table scans"),
+      m("p", "The following tables are being accessed with a full table scan, which means MySQL has to read the entire table."),
+      m("ul", [
+        vnode.state.tables.filter(function(o) {
+          if (o.fts) {
+            return true;
+          }
+        }).map(function(o) {
+          return m("li", "Table " + o.name)
+        })
+      ]),
+      m("h5", "Full index scans"),
+      m("p", "The following tables are being accessed with a full index scan, which means MySQL has to read an entire index on a table."),
+      m("ul", [
+        vnode.state.tables.filter(function(o) {
+          if (o.fullIndexScan) {
+            return true;
+          }
+        }).map(function(o) {
+          return m("li", "Table ", m("strong", o.name), " with index ", m("strong", o.key))
+        })
+      ]),
+      m("h5", "Misc"),
       m("ul", [
         vnode.state.tables.filter(function(o) {
           if (o.comment) {
@@ -141,8 +165,7 @@ var Comments = function(tables) {
           return false;
         }).map(function(o) {
           return m("li",
-            m("strong", "Table \"" + o.name + "\""),
-            ": ",
+            "Table ", m("strong", o.name), ":",
             o.comment);
         })
       ])
