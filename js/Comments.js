@@ -69,7 +69,7 @@ var Comments = function(tables) {
         m("p", "The following tables are being accessed with a full table scan. MySQL is reading all of the rows in these tables."),
         m("ul", [
           ftsTables.map(function(o) {
-            return m("li", "Table ", m("strong", o.name), " with ", m("strong", o.rows), " examined per scan.")
+            return m("li", "Table ", m("strong", o.name), " with ", m("strong", o.rows), " rows examined per scan.")
           })
         ])
       ];
