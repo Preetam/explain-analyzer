@@ -41,4 +41,9 @@ Explain.save = function(explain) {
   })
 }
 
+// fullTableScans returns an array of tables that have full table scans.
+Explain.fullTableScans = function() {
+
+}
+
 module.exports = Explain;

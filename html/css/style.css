@@ -1,7 +1,6 @@
 body {
   font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen,Ubuntu,Cantarell,Fira Sans,Droid Sans,Helvetica Neue,sans-serif;
-  font-size: 14px;
-  color: #4d4d4d;
+  font-size: 16px;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   padding: 1rem;
@@ -17,6 +16,28 @@ body {
   text-align: center;
 }
 
+.mea-explain-input-message {
+  padding: 5px 0;
+}
+
+.mea-analysis-heading {
+  font-weight: normal;
+  font-size: 28px;
+  border-bottom: 1px solid #aaa;
+}
+
+.mea-comments-heading {
+  font-size: 24px;
+  font-weight: normal;
+}
+
+.mea-comment-question {
+  font-weight: 600;
+  font-size: 20px;
+  margin: 0;
+  line-height: 2;
+}
+
 input:disabled {
   background: #eee;
 }
@@ -24,6 +45,19 @@ input:disabled {
 .explain-input {
   font-family: monospace;
   font-size: 0.8rem;
+}
+
+.mea-explain-table {
+  font-size: 14px;
+}
+
+.mea-highlight {
+  background-color: #ff0;
+}
+
+p {
+  line-height: 1.5;
+  margin: 0 0 1rem 0;
 }
 
 .error-message {

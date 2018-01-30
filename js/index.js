@@ -70,7 +70,9 @@ var App = {
           m("textarea",
             explainTextareaParams
           ),
-          m("span.pure-form-message", "Paste the output of EXPLAIN FORMAT=JSON ...")
+          m("span", {
+            class: "pure-form-message mea-explain-input-message"
+          }, "Paste the output of EXPLAIN FORMAT=JSON ...")
         ),
         m("fieldset.pure-group",
           m("button.pure-button", {onclick: vnode.state.analyze}, "Analyze"),
