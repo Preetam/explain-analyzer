@@ -13,7 +13,7 @@ You can use it here: https://preetam.github.io/explain-analyzer/#!/explain/
 
 ### Screenshot
 
-<img src="https://user-images.githubusercontent.com/379404/34457844-21dc9180-ed8c-11e7-8e70-270e391b971e.png" width=422/>
+![screenshot](https://user-images.githubusercontent.com/379404/35567762-2fd826b2-0594-11e8-8c8b-cb8951924459.png)
 
 ### License
 
