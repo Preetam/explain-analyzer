@@ -10,7 +10,12 @@ var Comments = function(tables) {
         t.fts = true;
         break;
       case "index":
-        t.fullIndexScan = true;
+        if (t.key == "PRIMARY") {
+          // Full primary key index scan on InnoDB is a full table scan.
+          t.fts = true;
+        } else {
+          t.fullIndexScan = true;
+        }
         break;
       case "range":
         t.comment = "A range of rows are accessed using an index.";
@@ -69,7 +74,11 @@ var Comments = function(tables) {
         m("p", "The following tables are being accessed with a full table scan. MySQL is reading all of the rows in these tables."),
         m("ul", [
           ftsTables.map(function(o) {
-            return m("li", "Table ", m("strong", o.name), " with ", m("strong", o.rows), " rows examined per scan.")
+            var rowsTag = "strong";
+            if (o.rows > 10000) {
+              rowsTag = "strong.mea-highlight";
+            }
+            return m("li", "Table ", m("strong", o.name), " with ", m(rowsTag, o.rows), " rows examined per scan.")
           })
         ])
       ];
