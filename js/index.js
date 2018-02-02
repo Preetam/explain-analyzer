@@ -28,6 +28,7 @@ var App = {
       Explain.save(explain).then(function() {
         m.route.set("/explain/" + explain.id)
       })
+      return false;
     }.bind(vnode.state);
 
     vnode.state.analyze = function() {
@@ -40,6 +41,7 @@ var App = {
       } catch(e) {
         this.analysis = new ErrorMessage("Error parsing explain JSON", ""+e)
       }
+      return false;
     }.bind(vnode.state);
   },
   view: function(vnode) {
