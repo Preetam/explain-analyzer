@@ -4,6 +4,8 @@ This is a web-based MySQL explain analyzer.
 
 You can use it here: https://preetam.github.io/explain-analyzer/#!/explain/
 
+Here's an example: https://preetam.github.io/explain-analyzer/#!/explain/0d2828b29fa9eeb73fff6880dee178431e47f26a.json
+
 ### Features
 
 * Table representation of MySQL JSON explain output
