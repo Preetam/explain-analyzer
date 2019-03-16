@@ -9,6 +9,9 @@ var Comments = function(tables) {
       case "ALL":
         t.fts = true;
         break;
+      case "Seq Scan": // postgres
+        t.fts = true;
+        break;
       case "index":
         if (t.key == "PRIMARY") {
           // Full primary key index scan on InnoDB is a full table scan.

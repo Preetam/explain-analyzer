@@ -22,6 +22,9 @@ var Table = function(name, rows, accessType, key, possibleKeys, keyLength, ref, 
   case "ALL":
     this.scalability = "n";
     break;
+  case "Seq Scan": // postgres
+    this.scalability = "n";
+    break;
   case "index":
     this.scalability = "n";
     break;

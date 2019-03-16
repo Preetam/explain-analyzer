@@ -15,11 +15,44 @@ function traverse(o, func) {
 
 Explain.parse = function(explain) {
   explain.tables = [];
-  traverse(explain.data, function(k, v) {
-    if (k == "table") {
-      explain.tables.push(v);
-    }
-  });
+
+  let isPostgres = false;
+  // Check if this is a PostgreSQL explain
+  if (explain.data[0].Plan) {
+    isPostgres = true;
+    console.log("got a postgres explain");
+    traverse(explain.data, function(k, v) {
+      if (k == "Plan") {
+        if (v["Relation Name"]) {
+          explain.tables.push({
+            table_name: v["Relation Name"],
+            access_type: v["Node Type"],
+            rows: v["Plan Rows"]
+          });
+        }
+      }
+      if (k == "Plans") {
+        for (var i in v) {
+          let plan = v[i];
+          if (plan["Relation Name"]) {
+            explain.tables.push({
+              table_name: plan["Relation Name"],
+              access_type: plan["Node Type"],
+              rows: plan["Plan Rows"]
+            });
+          }
+        }
+      }
+    });
+  } else {
+    traverse(explain.data, function(k, v) {
+      if (k == "table") {
+        explain.tables.push(v);
+      }
+    });
+  }
+
+  console.log(explain.tables);
 }
 
 Explain.load = function(explain, id) {
