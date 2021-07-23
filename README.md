@@ -4,14 +4,37 @@ This is a web-based MySQL explain analyzer.
 
 You can use it here: https://preetam.github.io/explain-analyzer/#!/explain/
 
-Here's an example: https://preetam.github.io/explain-analyzer/#!/explain/0d2828b29fa9eeb73fff6880dee178431e47f26a.json
+Try it with
+
+```json
+{
+  "query_block": {
+    "select_id": 1,
+    "cost_info": { "query_cost": "0.45" },
+    "table": {
+      "table_name": "test",
+      "access_type": "ALL",
+      "rows_examined_per_scan": 2,
+      "rows_produced_per_join": 2,
+      "filtered": "100.00",
+      "cost_info": {
+        "read_cost": "0.25",
+        "eval_cost": "0.20",
+        "prefix_cost": "0.45",
+        "data_read_per_join": "16"
+      },
+      "used_columns": ["id"]
+    }
+  }
+}
+```
 
 ### Features
 
-* Table representation of MySQL JSON explain output
-* Comments about explain interpretation
-* Experimental scalability analysis
-* Explain saving and permalinks
+- Table representation of MySQL JSON explain output
+- Comments about explain interpretation
+- Experimental scalability analysis
+- Explain saving and permalinks
 
 ### Screenshot
 
