@@ -1,0 +1,18 @@
+version: 2.1
+orbs:
+  shiftleft: shiftleft/shiftleft@1.0.6
+# Define a job to be invoked later in a workflow.
+# See: https://circleci.com/docs/2.0/configuration-reference/#jobs
+jobs:
+  build:
+    machine: true 
+    steps:
+      - checkout
+      - shiftleft/analyze:
+          app: explain-analyzer
+          target: .
+          language: js
+workflows:
+  workflow:
+    jobs:
+      - build
