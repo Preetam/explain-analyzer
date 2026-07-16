@@ -1,10 +1,21 @@
-# explain-analyzer [![CircleCI](https://circleci.com/gh/Preetam/explain-analyzer.svg?style=svg)](https://circleci.com/gh/Preetam/explain-analyzer)
+# explain-analyzer
 
-This is a web-based MySQL explain analyzer.
+Web-based analyzer for **MySQL** and **PostgreSQL** JSON `EXPLAIN` output.
 
-You can use it here: https://preetam.github.io/explain-analyzer/#!/explain/
+Use it locally with `npm run dev`, or from GitHub Pages after deploying `dist/`.
 
-Try it with
+### Features
+
+- Table representation of MySQL / PostgreSQL JSON explain output
+- Comments about explain interpretation (full table scans, index usage, etc.)
+- Experimental scalability analysis
+- Automatic dialect detection
+
+### Try it
+
+Paste either:
+
+**MySQL** — `EXPLAIN FORMAT=JSON ...`
 
 ```json
 {
@@ -29,16 +40,41 @@ Try it with
 }
 ```
 
-### Features
+**PostgreSQL** — `EXPLAIN (FORMAT JSON) ...`
 
-- Table representation of MySQL JSON explain output
-- Comments about explain interpretation
-- Experimental scalability analysis
-- Explain saving and permalinks
+```json
+[
+  {
+    "Plan": {
+      "Node Type": "Seq Scan",
+      "Relation Name": "test",
+      "Alias": "test",
+      "Startup Cost": 0.0,
+      "Total Cost": 1.02,
+      "Plan Rows": 2,
+      "Plan Width": 4
+    }
+  }
+]
+```
 
-### Screenshot
+### Develop
 
-![screenshot](https://user-images.githubusercontent.com/379404/35567762-2fd826b2-0594-11e8-8c8b-cb8951924459.png)
+```bash
+npm install
+npm run dev      # local server
+npm test         # vitest
+npm run build    # output in dist/
+```
+
+### Deploy
+
+Build, then publish the `dist/` directory (for example with a `gh-pages` branch).
+
+```bash
+npm run build
+# deploy contents of dist/
+```
 
 ### License
 

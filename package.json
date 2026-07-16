@@ -1,19 +1,25 @@
 {
   "name": "explain-analyzer",
-  "version": "0.0.1",
-  "description": "Explain analyzer for MySQL",
+  "version": "0.1.0",
+  "description": "Explain analyzer for MySQL and PostgreSQL",
+  "type": "module",
   "scripts": {
-    "test": "ospec",
-    "start": "webpack js/index.js html/js/app.min.js -d --watch",
-    "build": "webpack js/index.js html/js/app.min.js -p"
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview",
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
-  "keywords": [],
+  "keywords": ["mysql", "postgresql", "explain"],
   "repository": "github.com/Preetam/explain-analyzer",
-  "license": "bsd",
+  "license": "BSD-2-Clause",
   "dependencies": {
-    "mithril": "^1.1.3"
+    "mithril": "^2.2.2"
   },
   "devDependencies": {
-    "webpack": "^2.6.1"
+    "@types/mithril": "^2.2.7",
+    "typescript": "^5.8.2",
+    "vite": "^6.2.2",
+    "vitest": "^3.0.9"
   }
 }
