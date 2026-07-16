@@ -15,6 +15,8 @@ export class Table {
   fullTableScan: boolean;
   fullIndexScan: boolean;
   comment: string;
+  actualTimeMs: number | null;
+  rowsRemovedByFilter: number | null;
 
   constructor(normalized: NormalizedTable) {
     this.name = normalized.name;
@@ -30,6 +32,8 @@ export class Table {
     this.fullTableScan = normalized.fullTableScan;
     this.fullIndexScan = normalized.fullIndexScan;
     this.comment = normalized.comment;
+    this.actualTimeMs = normalized.actualTimeMs;
+    this.rowsRemovedByFilter = normalized.rowsRemovedByFilter;
   }
 
   setNewRows = (value: string) => {

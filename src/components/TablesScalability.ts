@@ -18,14 +18,18 @@ export const TablesScalability: m.Component<Attrs> = {
     }
 
     return m("div", [
-      m("h3", "Estimation (experimental!)"),
-      m("table.pure-table", [
+      m("h3", "What-if row scaling (experimental)"),
+      m(
+        "p.mea-scalability-explainer",
+        "Estimate how query latency would change if a table grew. Enter a hypothetical row count for each table; the factor below compares the estimated cost at the new size to the current cost. O(n) tables scale linearly, O(log n) tables barely move."
+      ),
+      m("table.pure-table.pure-table-striped", [
         m(
           "thead",
           m("tr", [
             m("th", "Table"),
-            m("th", "Row count"),
-            m("th", "Estimated row count or scale factor"),
+            m("th", "Current rows"),
+            m("th", "Hypothetical rows"),
           ])
         ),
         m(
@@ -37,7 +41,7 @@ export const TablesScalability: m.Component<Attrs> = {
             }
             return m("tr", [
               m("td", o.name),
-              m("td", o.rows),
+              m("td", o.rows.toLocaleString()),
               m("td", [
                 m("input", {
                   value: o.newRows,
@@ -51,7 +55,11 @@ export const TablesScalability: m.Component<Attrs> = {
           })
         ),
       ]),
-      m("p", ["Latency scale factor: ", m("strong", "~", factor.toFixed(2), "x")]),
+      m("p", [
+        "Estimated latency change: ",
+        m("strong", "~", factor.toFixed(2), "x"),
+        " relative to current row counts.",
+      ]),
     ]);
   },
 };

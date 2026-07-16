@@ -2,12 +2,18 @@ import m from "mithril";
 import { parseExplain, type ParsedExplain } from "./explain";
 import { Analysis } from "./components/Analysis";
 import { ErrorMessage } from "./components/ErrorMessage";
+import {
+  MYSQL_EXAMPLE,
+  POSTGRES_EXAMPLE,
+  POSTGRES_ANALYZE_EXAMPLE,
+} from "./examples";
 
 interface State {
   fieldData: string;
   explain: ParsedExplain | null;
   error: { heading: string; body: string } | null;
   analyze: (e?: Event) => void;
+  loadExample: (data: string) => void;
 }
 
 const PLACEHOLDER = `{
@@ -45,6 +51,11 @@ export const App: m.Component<Record<string, never>, State> = {
         };
       }
     }.bind(state);
+
+    state.loadExample = function (this: State, data: string) {
+      this.fieldData = data;
+      this.analyze();
+    }.bind(state);
   },
 
   view({ state }) {
@@ -63,11 +74,36 @@ export const App: m.Component<Record<string, never>, State> = {
             "Paste MySQL EXPLAIN FORMAT=JSON or PostgreSQL EXPLAIN (FORMAT JSON) output"
           ),
         ]),
-        m("fieldset.pure-group", [
+        m("fieldset.pure-group.mea-examples", [
           m(
             "button.pure-button.pure-button-primary",
             { type: "submit" },
             "Analyze"
+          ),
+          m("span.mea-examples-label", "Try:"),
+          m(
+            "button.pure-button.mea-example-btn",
+            {
+              type: "button",
+              onclick: () => state.loadExample(MYSQL_EXAMPLE),
+            },
+            "MySQL"
+          ),
+          m(
+            "button.pure-button.mea-example-btn",
+            {
+              type: "button",
+              onclick: () => state.loadExample(POSTGRES_EXAMPLE),
+            },
+            "PostgreSQL"
+          ),
+          m(
+            "button.pure-button.mea-example-btn",
+            {
+              type: "button",
+              onclick: () => state.loadExample(POSTGRES_ANALYZE_EXAMPLE),
+            },
+            "PostgreSQL ANALYZE"
           ),
         ]),
       ]),

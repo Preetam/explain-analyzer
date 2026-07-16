@@ -1,4 +1,5 @@
-import type { NormalizedTable, Scalability } from "./types";
+import { tableFindings } from "./findings";
+import type { Finding, NormalizedTable, Scalability } from "./types";
 
 interface MysqlTableNode {
   table_name?: string;
@@ -10,6 +11,11 @@ interface MysqlTableNode {
   key_length?: string | number | null;
   ref?: string[] | null;
   filtered?: string | number | null;
+  cost_info?: {
+    read_cost?: string;
+    prefix_cost?: string;
+  };
+  used_columns?: string[];
 }
 
 function scalabilityFor(accessType: string): Scalability {
@@ -99,6 +105,8 @@ function fromNode(node: MysqlTableNode): NormalizedTable {
     fullTableScan: false,
     fullIndexScan: false,
     comment: "",
+    actualTimeMs: null,
+    rowsRemovedByFilter: null,
   });
 }
 
@@ -126,6 +134,10 @@ export function parseMysql(data: unknown): NormalizedTable[] {
     }
   });
   return tables;
+}
+
+export function mysqlFindings(tables: NormalizedTable[]): Finding[] {
+  return tables.flatMap(tableFindings);
 }
 
 export function isMysqlExplain(data: unknown): boolean {

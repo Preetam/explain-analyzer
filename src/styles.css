@@ -5,10 +5,11 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   padding: 1rem;
+  color: #1f2933;
 }
 
 .container {
-  width: 48rem;
+  width: 56rem;
   max-width: 100%;
   margin: 0 auto;
 }
@@ -43,9 +44,138 @@ body {
   border-bottom: 1px solid #aaa;
 }
 
+/* Verdict banner */
+.mea-verdict {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 0.85rem 1rem;
+  margin: 1rem 0;
+  border-radius: 6px;
+  border-left: 4px solid transparent;
+}
+
+.mea-verdict-critical {
+  background: #fef2f2;
+  border-left-color: #b91c1c;
+}
+.mea-verdict-warning {
+  background: #fffbeb;
+  border-left-color: #b45309;
+}
+.mea-verdict-info {
+  background: #f0f9ff;
+  border-left-color: #0369a1;
+}
+.mea-verdict-ok {
+  background: #f0fdf4;
+  border-left-color: #15803d;
+}
+
+.mea-verdict-badge {
+  display: inline-block;
+  padding: 0.15rem 0.5rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: #fff;
+  white-space: nowrap;
+  margin-top: 0.15rem;
+}
+.mea-verdict-critical .mea-verdict-badge { background: #b91c1c; }
+.mea-verdict-warning .mea-verdict-badge { background: #b45309; }
+.mea-verdict-info .mea-verdict-badge { background: #0369a1; }
+.mea-verdict-ok .mea-verdict-badge { background: #15803d; }
+
+.mea-verdict-headline {
+  margin: 0 0 0.25rem;
+  font-size: 1.15rem;
+  font-weight: 600;
+}
+.mea-verdict-detail {
+  margin: 0;
+  color: #4b5563;
+  line-height: 1.45;
+}
+
+/* Findings list */
 .mea-comments-heading {
   font-size: 24px;
   font-weight: normal;
+  margin-bottom: 0.5rem;
+}
+
+.mea-comments-empty {
+  color: #15803d;
+}
+
+.mea-findings {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.mea-finding {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+  padding: 0.6rem 0.75rem;
+  margin-bottom: 0.5rem;
+  border-radius: 4px;
+  border-left: 3px solid transparent;
+}
+.mea-finding-critical {
+  background: #fef2f2;
+  border-left-color: #b91c1c;
+}
+.mea-finding-warning {
+  background: #fffbeb;
+  border-left-color: #b45309;
+}
+.mea-finding-info {
+  background: #f0f9ff;
+  border-left-color: #0369a1;
+}
+
+.mea-finding-badge {
+  display: inline-block;
+  padding: 0.1rem 0.45rem;
+  border-radius: 999px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: #fff;
+  white-space: nowrap;
+  margin-top: 0.15rem;
+}
+.mea-finding-critical .mea-finding-badge { background: #b91c1c; }
+.mea-finding-warning .mea-finding-badge { background: #b45309; }
+.mea-finding-info .mea-finding-badge { background: #0369a1; }
+
+.mea-finding-title {
+  font-weight: 600;
+  margin-bottom: 0.15rem;
+}
+.mea-finding-detail {
+  color: #4b5563;
+  line-height: 1.45;
+  font-size: 0.95rem;
+}
+
+/* Explain table */
+.mea-explain-table {
+  font-size: 14px;
+}
+.mea-explain-table td,
+.mea-explain-table th {
+  text-align: left;
+}
+.mea-explain-table td.mea-cell-warn {
+  background: #fffbeb;
+  font-weight: 600;
 }
 
 .mea-comment-question {
@@ -62,16 +192,12 @@ input:disabled {
 .explain-input {
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
   font-size: 0.8rem;
-  min-height: 12rem;
+  min-height: 14rem;
   width: 100%;
 }
 
-.mea-explain-table {
-  font-size: 14px;
-}
-
 .mea-highlight {
-  background-color: #ff0;
+  background-color: #fef08a;
 }
 
 p {
@@ -81,8 +207,36 @@ p {
 
 .error-message {
   padding: 1rem;
-  background-color: #fafafa;
-  color: #d02c2c;
+  background-color: #fef2f2;
+  color: #b91c1c;
+  border-radius: 4px;
+}
+
+/* Examples row */
+.mea-examples {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+.mea-examples-label {
+  color: #666;
+  font-size: 0.9rem;
+  margin-left: 0.5rem;
+}
+.mea-example-btn {
+  font-size: 0.85rem;
+  padding: 0.4rem 0.75rem;
+}
+
+/* Scalability explainer */
+.mea-scalability-explainer {
+  color: #555;
+  font-size: 0.92rem;
+  background: #f9fafb;
+  padding: 0.6rem 0.75rem;
+  border-radius: 4px;
+  border-left: 3px solid #d1d5db;
 }
 
 .footer {

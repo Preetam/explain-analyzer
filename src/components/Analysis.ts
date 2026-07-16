@@ -1,9 +1,11 @@
 import m from "mithril";
 import { dialectLabel, type ParsedExplain } from "../explain";
+import { buildVerdict } from "../explain/verdict";
 import { Table } from "../model/Table";
 import { Comments } from "./Comments";
 import { ExplainTable } from "./ExplainTable";
 import { TablesScalability } from "./TablesScalability";
+import { VerdictBanner } from "./VerdictBanner";
 
 interface Attrs {
   explain: ParsedExplain;
@@ -32,13 +34,22 @@ export const Analysis: m.Component<Attrs, State> = {
     syncTables(state, attrs.explain);
   },
   view({ attrs, state }) {
+    const verdict = buildVerdict(
+      attrs.explain.dialect,
+      attrs.explain.tables,
+      attrs.explain.findings
+    );
     return m("div", [
       m("h2.mea-analysis-heading", [
         "Analysis",
         m("span.mea-dialect", dialectLabel(attrs.explain.dialect)),
       ]),
-      m(ExplainTable, { tables: state.tables }),
-      m(Comments, { tables: state.tables, dialect: attrs.explain.dialect }),
+      m(VerdictBanner, { verdict }),
+      m(ExplainTable, {
+        tables: state.tables,
+        dialect: attrs.explain.dialect,
+      }),
+      m(Comments, { findings: attrs.explain.findings }),
       m(TablesScalability, { tables: state.tables }),
     ]);
   },
